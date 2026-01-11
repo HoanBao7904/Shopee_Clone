@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -83,3 +84,6 @@ export default defineConfig([
 "printWidth": 120, // tiếng việt: giới hạn độ dài dòng ở 120 ký tự
 "jsxSingleQuote": true // tiếng việt: sử dụng dấu nháy đơn trong JSX thay vì dấu nháy kép
 }
+=======
+# Shopee_Clone
+>>>>>>> 824187a05fcb43e25eb073df7e8ce6462bb989fe
