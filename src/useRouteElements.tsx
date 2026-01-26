@@ -14,6 +14,7 @@ import UserLayout from './pages/User/Layout/UserLayout'
 import ChangePassWord from './pages/User/pages/changepassword'
 import HistoryPurchase from './pages/User/pages/HistoryPurchases'
 import Profile from './pages/User/pages/Profile'
+import CartLayout from './layout/CartLayout'
 
 //tạo cái component để kiểm tra người dùng login chưa
 
@@ -60,9 +61,9 @@ export default function useRouteElements() {
         {
           path: path.cart,
           element: (
-            <MainLayout>
+            <CartLayout>
               <Cart />
-            </MainLayout>
+            </CartLayout>
           )
         },
         {

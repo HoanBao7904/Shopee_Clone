@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import DOMPurify from 'dompurify'
 import ProductRating from 'src/components/ProductRating'
@@ -9,14 +9,15 @@ import type { Product, ProductListConfig } from 'src/types/Product.type'
 import ProductItem from '../ProductList/Components/ProductItem'
 import QuantityController from 'src/components/QuantityController'
 import purchasesApi from 'src/apis/purchases.api'
-// import { queryClient } from 'src/main'
 import { purchasesStatus } from 'src/contexts/purchases'
 import { toast } from 'react-toastify'
+import { path } from 'src/contexts/path'
 
 export default function ProductDetail() {
   const [byCount, setByCount] = useState(1)
   const queryClient = useQueryClient()
   const { nameId } = useParams()
+  const navigate = useNavigate()
   const id = getIDFormNameid(nameId as string)
   const { data: productDetailData } = useQuery({
     queryKey: ['product', id],
@@ -130,6 +131,20 @@ export default function ProductDetail() {
   const handleRemoteZoom = () => {
     imagesRef.current?.removeAttribute('style')
   }
+
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({
+      product_id: product?._id as string,
+      buy_count: byCount
+    })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
+  }
+
   // console.log(product?.image)
   if (!product) return null
   return (
@@ -258,6 +273,7 @@ export default function ProductDetail() {
                   Thêm vào giỏ hàng
                 </button>
                 <button
+                  onClick={buyNow}
                   className='ml-4 flex h-12 min-w[5rem] justify-center items-center px-2 rounded-sm
                  bg-orange text-white shadow-sm outline-none hover:bg-orange/70 capitalize'
                 >

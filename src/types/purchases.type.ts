@@ -16,6 +16,11 @@ export interface Purchases {
   updatedAt: string
 }
 
+export interface ExtendedPurchases extends Purchases {
+  disable: boolean
+  checked: boolean
+}
+
 // Thông tin `status`:
 // -1: Sản phẩm đang trong giỏ hàng
 // 0: Tất cả sản phâm

@@ -8,9 +8,15 @@ export default function UserSideNav() {
   return (
     <div>
       <div className='flex items-center py-4 border-b border-b-gray-200'>
-        <Link to={path.profile} className='h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-black'>
-          <img src={profile?.avatar || Userimg} alt='' />
-        </Link>
+        <div className='h-12 w-12 '>
+          <Link
+            to={path.profile}
+            // className='h-full w-full flex-shrink-0 overflow-hidden rounded-full border border-black'
+          >
+            <img src={profile?.avatar || Userimg} alt='' className='h-full w-full rounded-full object-cover' />
+          </Link>
+        </div>
+
         <div className='flex-grow pl-4'>
           <div className='text-black mb-1 truncate text-left'>{profile?.name}</div>
           <Link to={path.profile} className='flex items-center capitalize text-gray-500'>

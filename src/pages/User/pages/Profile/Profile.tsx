@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import userAPI from 'src/apis/user.api'
@@ -14,17 +14,25 @@ import { AppContext } from 'src/contexts/app.context'
 import { setProfile } from 'src/utils/auth'
 
 type FormData = Pick<UserSchemaType, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
-
+// type FromDataError = Omit<FormData, 'date_of_birth'> & {
+//   date_of_birth?: string
+// }
 const profileSchema = userSchema.pick(['name', 'address', 'phone', 'date_of_birth', 'avatar'])
 
 export default function Profile() {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [file, setFile] = useState<File>()
+  const prevImageFile = useMemo(() => {
+    return file ? URL.createObjectURL(file) : ''
+  }, [file])
   const { setProfile: setProfileUser } = useContext(AppContext)
   const {
     register,
     control,
     formState: { errors },
     handleSubmit,
-    setValue
+    setValue,
+    watch
   } = useForm<FormData>({
     defaultValues: {
       name: '',
@@ -35,6 +43,8 @@ export default function Profile() {
     },
     resolver: yupResolver(profileSchema)
   })
+
+  const avatar = watch('avatar')
   const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userAPI.getProfile //()=> userAPI.getProfile()
@@ -44,6 +54,9 @@ export default function Profile() {
 
   const updateProfileMutation = useMutation({
     mutationFn: userAPI.updateProfile
+  })
+  const uploadAvaterMutation = useMutation({
+    mutationFn: userAPI.uploadAvata
   })
   //khi nào có data thì set vào form
   useEffect(() => {
@@ -58,15 +71,40 @@ export default function Profile() {
   // console.log(profile)
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
+    // console.log(data)
+    try {
+      let avatarName = avatar
+      if (file) {
+        const from = new FormData()
+        from.append('image', file)
+        const uploadRes = await uploadAvaterMutation.mutateAsync(from)
+        // console.log(uploadRes.data.data)
+        avatarName = uploadRes.data.data
+        setValue('avatar', avatarName)
+      }
+      const res = await updateProfileMutation.mutateAsync({
+        ...data,
+        date_of_birth: data.date_of_birth?.toISOString(),
+        avatar: avatarName
+      })
+      setProfileUser(res.data.data)
+      setProfile(res.data.data)
 
-    const res = await updateProfileMutation.mutateAsync({ ...data, date_of_birth: data.date_of_birth?.toISOString() })
-    setProfileUser(res.data.data)
-    setProfile(res.data.data)
-
-    refetch()
-    toast.success(res.data.message)
+      refetch()
+      toast.success(res.data.message)
+    } catch (error) {
+      console.log(error)
+    }
   })
+
+  const handleUpload = () => {
+    fileInputRef.current?.click()
+  }
+
+  const onFilechange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileFromLacal = event.target.files?.[0]
+    setFile(fileFromLacal)
+  }
   return (
     <div className='rounded-sm bg-white px-7 pb-20 shadow'>
       <div className='border-b border-b-gray-400 py-5'>
@@ -146,11 +184,12 @@ export default function Profile() {
         <div className='flex justify-center md:border-l md:border-l-gray-300 md:w-72 '>
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24 '>
-              <img src={profile?.avatar} alt='' className='h-full w-full rounded-full object-cover' />
+              <img src={prevImageFile || avatar} alt='' className='h-full w-full rounded-full object-cover' />
             </div>
-            <input type='file' accept='.jbg,.png,.jpeg' className='hidden' />
+            <input type='file' accept='.jbg,.png,.jpeg' className='hidden' ref={fileInputRef} onChange={onFilechange} />
             <button
               type='button'
+              onClick={handleUpload}
               className='px-3 flex h-10 items-center justify-center bg-white test-sm text-gray-600 shadow-sm rounded-sm border border-gray-400'
             >
               Chọn ảnh

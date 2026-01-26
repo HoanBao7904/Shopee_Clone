@@ -1,48 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { createSearchParams, Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import Popover from '../Popover'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { AppContext } from 'src/contexts/app.context'
 import { path } from 'src/contexts/path'
-import authAPi from 'src/apis/auth.api'
-import useQueryConfig from 'src/hooks/useQueryConfig'
-import { useForm } from 'react-hook-form'
-import { schema, type Schema } from 'src/utils/rules'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { omit } from 'lodash'
+
 import { purchasesStatus } from 'src/contexts/purchases'
 import purchasesApi from 'src/apis/purchases.api'
 import { formatInitCurrency } from 'src/utils/utils'
-import Userimg from 'src/images/Userimg.svg'
-type FormData = Pick<Schema, 'name'>
-
-const nameSchema = schema.pick(['name'])
+import NavHeader from '../NavHeader'
+import useSeachPeoducts from 'src/hooks/useSeachPeoducts'
 
 const maxPurchases = 5
 
 export default function HeaderMain() {
-  const { register, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(nameSchema)
-  })
-  const navigate = useNavigate()
   // console.log(queryConfig)
-  const { SetIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
+  const { isAuthenticated } = useContext(AppContext)
   // const navigator = useNavigate()
-  const logoutMutation = useMutation({
-    mutationFn: authAPi.logoutAccount,
-    onSuccess: () => {
-      SetIsAuthenticated(false)
-      setProfile(null)
-    }
-  })
-
-  const queryConfig = useQueryConfig()
-
+  const { handleSearch, register } = useSeachPeoducts()
   const { data: purchasesInCartData } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchasesApi.getPurchases({ status: purchasesStatus.inCart }),
@@ -50,208 +27,10 @@ export default function HeaderMain() {
   })
   const purchasesInCart = purchasesInCartData?.data.data
 
-  const handleLogout = () => {
-    logoutMutation.mutate()
-  }
-
-  const handleSearch = handleSubmit((data) => {
-    const Config = queryConfig.order
-      ? omit(
-          {
-            ...queryConfig,
-            name: data.name
-          },
-          ['sort_by', 'order']
-        )
-      : {
-          ...queryConfig,
-          name: data.name
-        }
-
-    navigate({
-      pathname: path.home,
-      search: createSearchParams(Config).toString()
-    })
-  })
-
   return (
     <div className='pb-5 pt-2 bg-orange text-white'>
       <div className='container'>
-        <div className='flex justify-end'>
-          <Popover
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
-            renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-200 min-w-[160px]'>
-                <div className='flex flex-col'>
-                  <button className='py-3 px-4 hover:text-orange text-left text-gray-800 hover:bg-gray-50 transition-colors w-full text-sm'>
-                    Tiếng Việt
-                  </button>
-                  <button className='py-3 px-4 hover:text-orange text-left text-gray-800 hover:bg-gray-50 transition-colors w-full text-sm'>
-                    Tiếng Anh
-                  </button>
-                </div>
-              </div>
-            }
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='size-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418'
-              />
-            </svg>
-            <span className='mx-1'>Tiếng Việt</span>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='size-6'
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='m4.5 12.75 6 6 9-13.5' />
-            </svg>
-          </Popover>
-          {/* <div
-            className='flex items-center py-1 hover:text-gray-300 cursor-pointer'
-            ref={reference}
-            onMouseEnter={showTooltip}
-            onMouseLeave={hideTooltip}
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='size-6'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418'
-              />
-            </svg>
-            <span className='mx-1'>Tiếng Việt</span>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='size-6'
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='m4.5 12.75 6 6 9-13.5' />
-            </svg>
-          </div> */}
-
-          {/* <FloatingPortal>
-            <AnimatePresence>
-              {open && (
-                <motion.div
-                  ref={refs.setFloating}
-                  style={floatingStyles}
-                  className='z-50'
-                  onMouseEnter={showTooltip} // Thêm này
-                  onMouseLeave={hideTooltip} // Thêm này
-                >
-                  <div
-                    ref={arrowRef}
-                    className='border-x-transparent border-t-transparent border-b-white border-[11px] absolute z-10'
-                    style={{
-                      left: middlewareData.arrow?.x,
-                      top: middlewareData.arrow?.y,
-                      transform: 'translateY(-100%)'
-                    }}
-                  />
-
-                  
-                  <motion.div
-                    initial={{ opacity: 0, transform: 'scale(0)' }}
-                    animate={{ opacity: 1, transform: 'scale(1) ' }}
-                    exit={{ opacity: 0, transform: 'scale(0)' }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className='bg-white relative shadow-md rounded-sm border border-gray-200 min-w-[160px]'>
-                      <div className='flex flex-col'>
-                        <button className='py-3 px-4 hover:text-orange text-left text-gray-800 hover:bg-gray-50 transition-colors w-full text-sm'>
-                          Tiếng Việt
-                        </button>
-                        <button className='py-3 px-4 hover:text-orange text-left text-gray-800 hover:bg-gray-50 transition-colors w-full text-sm'>
-                          Tiếng Anh
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </FloatingPortal> */}
-          {isAuthenticated && (
-            <Popover
-              className='flex items-center py-1 hover:text-gray-300 cursor-pointer ml-4'
-              renderPopover={
-                // <div className='bg-white relative shadow-md rounded-sm border border-gray-200 min-w-[160px]'>
-                //       <div className='flex flex-col'>
-                //         <button className='py-3 px-4 hover:text-orange text-left text-gray-800 hover:bg-gray-50 transition-colors w-full text-sm'>
-                //           Tiếng Việt
-                //         </button>
-                //         <button className='py-3 px-4 hover:text-orange text-left text-gray-800 hover:bg-gray-50 transition-colors w-full text-sm'>
-                //           Tiếng Anh
-                //         </button>
-                //       </div>
-                //     </div>
-                <div>
-                  <Link
-                    to={path.profile}
-                    className='block py-2 px-3 hover:bg-slate-100 bg-white hover:text-cran-500 w-full hover:text-cyan-400 text-left'
-                  >
-                    Tài Khoản của tôi
-                  </Link>
-                  <Link
-                    to=''
-                    className='block py-2 px-3 hover:bg-slate-100 bg-white hover:text-cran-500 w-full hover:text-cyan-400 text-left'
-                  >
-                    Đơn mua
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className='block py-2 px-3 hover:bg-slate-100 bg-white hover:text-cran-500 w-full hover:text-cyan-400 text-left'
-                  >
-                    Đăng Xuất
-                  </button>
-                </div>
-              }
-            >
-              <div className='w-6 h-6 mr-2 flex-shrink-0'>
-                <img
-                  src={profile?.avatar || Userimg}
-                  alt='avatar'
-                  className='w-full h-full object-cover rounded-full'
-                />
-              </div>
-              <div>{profile?.name}</div>
-            </Popover>
-          )}
-          {!isAuthenticated && (
-            <div className='flex items-center'>
-              <Link to='/login' className='mx-3 capitalize hover:text-white/70'>
-                Đăng Nhập
-              </Link>
-              <div className='border-r-[1px] border-r-white/40 h-4'></div>
-              <Link to='/register' className='mx-3 capitalize hover:text-white/70'>
-                Đăng Ký
-              </Link>
-            </div>
-          )}
-        </div>
+        <NavHeader />
         <div className='grid grid-cols-12 gap-4 mt-4 items-end'>
           <Link to='/' className='col-span-2'>
             <svg viewBox='0 0 192 65' className='h-7 w-full lg:h-11 fill-white'>

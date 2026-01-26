@@ -2,7 +2,7 @@ import type { AxiosError, AxiosInstance } from 'axios'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import type { AuthResponse } from 'src/types/auth.type'
-import { clearLS, getAccessToken, saveAccessToken, setProfile } from './auth'
+import { clearLS, getAccessToken, setAccessToken, setProfile } from './auth'
 import { path } from 'src/contexts/path'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -44,7 +44,7 @@ class Http {
         if (url?.endsWith(path.login) || url?.endsWith('/register')) {
           //ko dùng this. được cánh nhanh nhất đỏi function thành arow func
           this.accessToken = (response.data as AuthResponse).data.access_token
-          saveAccessToken(this.accessToken)
+          setAccessToken(this.accessToken)
           const data = response.data as AuthResponse
           setProfile(data.data.user)
         } else if (url?.endsWith('/logout')) {
@@ -57,7 +57,7 @@ class Http {
         if (error.response?.status !== 422) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data: any | undefined = error.response?.data
-          const message = data.message || error.message
+          const message = data?.message || error.message
           toast.error(message)
         }
         if (error.response?.status === 401) {
@@ -77,8 +77,6 @@ const http = new Http().instance
 
 export default http
 
-// import type { AxiosError, AxiosInstance } from 'axios'
-// import axios from 'axios'
 // import { toast } from 'react-toastify'
 // import type { AuthResponse } from 'src/types/auth.type'
 // import { clearAccessToken, getAccessToken, saveAccessToken } from './auth'
