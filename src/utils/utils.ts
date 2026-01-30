@@ -1,5 +1,6 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
-
+import config from 'src/contexts/config'
+import Userimg from 'src/images/image.png'
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
 }
@@ -40,4 +41,11 @@ export const genarateNameID = ({ name, id }: { name: string; id: string }) => {
 export const getIDFormNameid = (nameId: string) => {
   const arr = nameId.split('-i,')
   return arr[arr.length - 1]
+}
+
+// export const getAvatarUrl = (avatarName?: string) => (avatarName ? `${config.BASEURL}images/${avatarName}` : Userimg)
+export const getAvatarUrl = (avatar?: string) => {
+  if (!avatar) return Userimg
+  if (avatar.startsWith('http')) return avatar
+  return `${config.BASEURL}images/${avatar}`
 }

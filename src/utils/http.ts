@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import type { AuthResponse } from 'src/types/auth.type'
 import { clearLS, getAccessToken, setAccessToken, setProfile } from './auth'
 import { path } from 'src/contexts/path'
+import config from 'src/contexts/config'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -14,7 +15,7 @@ class Http {
     this.accessToken = getAccessToken()
     // console.log('Current token:', this.accessToken)
     this.instance = axios.create({
-      baseURL: 'https://api-ecom.duthanhduoc.com/',
+      baseURL: config.BASEURL,
       // baseURL: 'http://localhost:8080',
       timeout: 1000 * 10,
       headers: {

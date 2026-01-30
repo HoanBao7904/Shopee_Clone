@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom'
 import { path } from 'src/contexts/path'
 import { useMutation } from '@tanstack/react-query'
 import authAPi from 'src/apis/auth.api'
-
+// import { getAvatarUrl } from 'src/utils/utils'
+import Userimg from 'src/images/Userimg.svg'
+import { getAvatarUrl } from 'src/utils/utils'
 export default function NavHeader() {
   const { SetIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
 
@@ -90,7 +92,11 @@ export default function NavHeader() {
           }
         >
           <div className='w-6 h-6 mr-2 flex-shrink-0'>
-            <img src={profile?.avatar} alt='avatar' className='w-full h-full object-cover rounded-full' />
+            <img
+              src={getAvatarUrl(profile?.avatar) || Userimg}
+              alt='avatar'
+              className='w-full h-full object-cover rounded-full'
+            />
           </div>
           <div>{profile?.email}</div>
         </Popover>

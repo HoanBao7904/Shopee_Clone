@@ -51,6 +51,15 @@ export const rules: Rule = {
   }
 }
 
+const handleConfirmPassword = (refString: string) => {
+  return yup
+    .string()
+    .required('password ép buộc nhập')
+    .min(6, '6 - 160 kí tự')
+    .max(160, '6 - 160 kí tự')
+    .oneOf([yup.ref(refString)], 'nhập lại password ko khớp')
+}
+
 export const schema = yup.object({
   price_min: yup
     .string()
@@ -111,12 +120,7 @@ export const schema = yup.object({
     })
     .default(''),
   password: yup.string().required('password ép buộc nhập').min(6, '6 - 160 kí tự').max(160, '6 - 160 kí tự'),
-  confirm_password: yup
-    .string()
-    .required('password ép buộc nhập')
-    .min(6, '6 - 160 kí tự')
-    .max(160, '6 - 160 kí tự')
-    .oneOf([yup.ref('password')], 'nhập lại password ko khớp'),
+  confirm_password: handleConfirmPassword('password'),
   name: yup.string().trim().required('phải nhập tên sản phẩm')
 })
 
@@ -127,8 +131,8 @@ export const userSchema = yup.object({
   avatar: yup.string().max(1000, 'độ dài tối đa 1000 kí tự').required(),
   date_of_birth: yup.date().max(new Date(), 'hãy chọn ngày trong quá khứ').required(),
   password: schema.fields['password'],
-  newPassword: schema.fields['password'],
-  confirm_password: schema.fields['confirm_password']
+  new_password: schema.fields['password'],
+  confirm_password: handleConfirmPassword('newPassword')
 })
 
 export type UserSchemaType = yup.InferType<typeof userSchema>
