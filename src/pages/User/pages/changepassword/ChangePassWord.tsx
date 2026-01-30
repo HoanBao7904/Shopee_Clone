@@ -11,6 +11,7 @@ import { userSchema, type UserSchemaType } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 type FormData = Pick<UserSchemaType, 'password' | 'confirm_password' | 'new_password'>
 const passWordSchema = userSchema.pick(['password', 'new_password', 'confirm_password'])
+
 export default function ChangePassWord() {
   const {
     register,
@@ -43,7 +44,7 @@ export default function ChangePassWord() {
         if (formError) {
           Object.keys(formError).forEach((key) => {
             setError(key as keyof FormData, {
-              message: formError[key as keyof FormData],
+              message: String(formError[key as keyof FormData]),
               type: 'Server'
             })
           })

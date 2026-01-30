@@ -132,7 +132,7 @@ export const userSchema = yup.object({
   date_of_birth: yup.date().max(new Date(), 'hãy chọn ngày trong quá khứ').required(),
   password: schema.fields['password'],
   new_password: schema.fields['password'],
-  confirm_password: handleConfirmPassword('newPassword')
+  confirm_password: handleConfirmPassword('new_password')
 })
 
 export type UserSchemaType = yup.InferType<typeof userSchema>
