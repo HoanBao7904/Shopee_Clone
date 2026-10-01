@@ -20,7 +20,6 @@ export default function Input({
   classNameInput = 'p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm',
   classNameError = 'mt-1 text-red-600 min-h-[1.25rem] text-sm',
   classNameEye = 'size-5 absolute top-0 right-1 cursor-pointer',
-
   ...rest
 }: Props) {
   const registerResult = register && name ? register(name, rules) : null
@@ -36,6 +35,7 @@ export default function Input({
     return rest.type
   }
   return (
+    
     <div className={className}>
       <input className={classNameInput} {...registerResult} {...rest} type={handleType()} />
       {rest.type === 'password' && openEye && (

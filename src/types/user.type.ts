@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 type Role = 'User' | 'Adim'
 
 export interface User {
@@ -11,6 +9,6 @@ export interface User {
   avatar?: string
   address?: string
   phone?: string
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 }

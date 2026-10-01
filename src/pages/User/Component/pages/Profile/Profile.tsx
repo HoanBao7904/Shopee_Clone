@@ -8,10 +8,10 @@ import Button from 'src/button'
 import Input from 'src/components/Input'
 import InputNumber from 'src/components/InputNumber'
 import { userSchema, type UserSchemaType } from 'src/utils/rules'
-import DateSelect from '../../DateSelect'
 import { toast } from 'react-toastify'
 import { AppContext } from 'src/contexts/app.context'
 import { setProfile } from 'src/utils/auth'
+import DateSelect from 'src/pages/User/DateSelect'
 
 type FormData = Pick<UserSchemaType, 'name' | 'address' | 'phone' | 'date_of_birth' | 'avatar'>
 

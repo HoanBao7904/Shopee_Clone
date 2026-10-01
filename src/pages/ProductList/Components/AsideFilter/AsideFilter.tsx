@@ -8,10 +8,10 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, type Schema } from 'src/utils/rules'
 import type { NoUndefinedField } from 'src/types/utils.type'
-
 import { omit } from 'lodash'
 import RaitingStart from '../RaitingStart'
 import type { queryConfig } from 'src/hooks/useQueryConfig'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   queryConfig: queryConfig
@@ -24,6 +24,8 @@ type FormDara = NoUndefinedField<Pick<Schema, 'price_min' | 'price_max'>>
 const priceSchema = schema.pick(['price_min', 'price_max'])
 
 export default function AsideFilter({ categaries, queryConfig }: Props) {
+  const { t } = useTranslation('home')
+
   const { category } = queryConfig //lay category tren url id(no la id)
   // console.log('category', category)
   // console.log('categaries', categaries)
@@ -84,7 +86,8 @@ export default function AsideFilter({ categaries, queryConfig }: Props) {
             </g>
           </g>
         </svg>
-        Tat Ca San Pham
+        {t('aside filter.all categories')}
+        {/* all categaries là key */}
       </Link>
       <div className='bg-gray-800 h-[1px] w-full my-4'></div>
 
@@ -140,7 +143,7 @@ export default function AsideFilter({ categaries, queryConfig }: Props) {
             />
           </g>
         </svg>
-        BO LoC TIM KIEM
+        {t('aside filter.fillter search')}
       </Link>
 
       <div className='bg-gray-800 h-[0.5px] my-4'></div>

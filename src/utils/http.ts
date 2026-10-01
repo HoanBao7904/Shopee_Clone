@@ -6,8 +6,6 @@ import { clearLS, getAccessToken, setAccessToken, setProfile } from './auth'
 import { path } from 'src/contexts/path'
 import config from 'src/contexts/config'
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 class Http {
   instance: AxiosInstance
   private accessToken: string

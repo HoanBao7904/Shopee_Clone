@@ -1,6 +1,7 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
 import config from 'src/contexts/config'
 import Userimg from 'src/images/image.png'
+
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
 }
@@ -34,10 +35,6 @@ export const genarateNameID = ({ name, id }: { name: string; id: string }) => {
   return removeSpecialCharacter(name).replace(/\s/g, '-') + `-i,${id}`
 }
 
-// export const getIDFormNameid = (nameId: string) => {
-//   const arr = nameId.split('-i')
-//   return arr[arr.length - 1]
-// }
 export const getIDFormNameid = (nameId: string) => {
   const arr = nameId.split('-i,')
   return arr[arr.length - 1]

@@ -12,8 +12,11 @@ import purchasesApi from 'src/apis/purchases.api'
 import { purchasesStatus } from 'src/contexts/purchases'
 import { toast } from 'react-toastify'
 import { path } from 'src/contexts/path'
+import { useTranslation } from 'react-i18next'
 
 export default function ProductDetail() {
+  const { t } = useTranslation(['product'])
+
   const [byCount, setByCount] = useState(1)
   const queryClient = useQueryClient()
   const { nameId } = useParams()
@@ -27,13 +30,9 @@ export default function ProductDetail() {
   //ban đầu cho array từ 0 đến 5
   const [activeImage, setActiveImage] = useState('')
   const product = productDetailData?.data.data
-  // console.log(product)
 
   const queryConfig: ProductListConfig = { limit: '20', page: '1', category: product?.category._id }
-  // console.log('queryConfig:', queryConfig)
-  // console.log(queryConfig)
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: ProductData } = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => {
@@ -48,10 +47,6 @@ export default function ProductDetail() {
     () => (product ? product?.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
   )
-  // const h = product?.images.slice(0, 5)
-  // console.log(h)
-  //dung usememo de han che khi render lai tinh lai
-
   const handleByCount = (value: number) => {
     setByCount(value)
   }
@@ -75,12 +70,6 @@ export default function ProductDetail() {
   const addToCartMutation = useMutation({
     mutationFn: (body: { product_id: string; buy_count: number }) => purchasesApi.addtoCart(body)
   })
-
-  //   {
-  // mutationFn: (body) => {
-  //   return purchasesApi.addtoCart(body)
-  // }
-  // }
   const addToCart = () => {
     addToCartMutation.mutate(
       {
@@ -93,7 +82,6 @@ export default function ProductDetail() {
           queryClient.invalidateQueries({
             queryKey: ['purchases', { status: purchasesStatus.inCart }]
           })
-          // queryKey: ['purchases', { status: purchasesStatus.inCart }]
         }
       }
     )
@@ -248,7 +236,9 @@ export default function ProductDetail() {
                   value={byCount}
                   max={product.quantity}
                 />
-                <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẳn</div>
+                <div className='ml-6 text-sm text-gray-500'>
+                  {product.quantity} {t('Available')}
+                </div>
               </div>
               <div className='mt-8 flex items-center'>
                 <button

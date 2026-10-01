@@ -19,7 +19,6 @@ export default function Login() {
   const { SetIsAuthenticated, setProfile } = useContext(AppContext)
   const navigator = useNavigate()
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
   const {
     setError,
     register, // đăng ký input với react-hook-form
@@ -32,20 +31,13 @@ export default function Login() {
     mutationFn: (body: FormData) => authAPi.loginAccount(body)
   })
   const onSubmit = handleSubmit((data) => {
-    // console.log(data)
-
     loginAccountMutation.mutate(data, {
       onSuccess: (data) => {
         // console.log(data)
         SetIsAuthenticated(true)
         setProfile(data.data.data.user)
         navigator('/')
-
         toast.success('đăng nhập thành công')
-        // localStorage.setItem('access_token', data.data?.data?.access_token)
-        // Nếu muốn chuyển hướng sang trang đăng nhập hoặc trang chủ
-        // navigate('/login') // hoặc navigate('/') tùy logic của bs
-        // toast.success('Đăng ký tài khoản thành công!')
       },
       onError: (errors) => {
         if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormData>>(errors)) {

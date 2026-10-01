@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -8,11 +8,12 @@ import App from './App'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { AppProvider } from './contexts/app.context'
+import 'src/i18n/i18n'
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: false, //dòng này để khi mình focus vào window thì nó sẽ không tự động refetch lại dữ liệu
       retry: 0 //nếy để là 3 thì khi fail nó sẽ retry lại 3 lần mới thôi
     }
   }

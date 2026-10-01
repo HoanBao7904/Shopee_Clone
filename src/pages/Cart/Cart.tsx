@@ -65,6 +65,7 @@ export default function Cart() {
       }, 0),
     [purchasesChecked]
   )
+
   const totalCheckedPurchasesSavingPrice = useMemo(
     () =>
       purchasesChecked.reduce((result, current) => {
