@@ -11,23 +11,21 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
-import Button from 'src/button'
+import Button from 'src/Button'
 
 interface FormData {
   email: string
   password: string
   confirm_password: string
 }
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export default function Register() {
   const { SetIsAuthenticated, setProfile } = useContext(AppContext)
-  const navigator = useNavigate()
 
   const {
     register,
     handleSubmit,
-    getValues, // lấy giá trị của form
-    watch, // theo dõi sự thay đổi của input
+    getValues, // lấy giá trị của form // theo dõi sự thay đổi của input
     setError,
     formState: { errors }
   } = useForm<FormData>()

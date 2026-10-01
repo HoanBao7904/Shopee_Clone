@@ -22,7 +22,12 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src"]
 }
+
+//target es2015 thay vi es2023 de ho tro nhieu nguoi hon

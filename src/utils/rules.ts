@@ -135,6 +135,15 @@ export const userSchema = yup.object({
   confirm_password: handleConfirmPassword('new_password')
 })
 
+export const passWordSchema = yup.object({
+  password: yup.string().required('Mật khẩu cũ là bắt buộc'),
+  new_password: yup.string().required('Mật khẩu mới là bắt buộc'),
+  confirm_password: yup
+    .string()
+    .required('Vui lòng nhập lại mật khẩu mới')
+    .oneOf([yup.ref('new_password')], 'Mật khẩu xác nhận không khớp')
+})
+
 export type UserSchemaType = yup.InferType<typeof userSchema>
 
 export type Schema = yup.InferType<typeof schema>

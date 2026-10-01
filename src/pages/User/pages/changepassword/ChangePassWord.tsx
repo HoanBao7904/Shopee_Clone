@@ -4,13 +4,18 @@ import { omit } from 'lodash'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import userAPI from 'src/apis/user.api'
-import Button from 'src/button'
+import Button from 'src/Button'
 import Input from 'src/components/Input'
 import type { ErrorResponseApi } from 'src/types/utils.type'
-import { userSchema, type UserSchemaType } from 'src/utils/rules'
+import { passWordSchema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
-type FormData = Pick<UserSchemaType, 'password' | 'confirm_password' | 'new_password'>
-const passWordSchema = userSchema.pick(['password', 'new_password', 'confirm_password'])
+type FormData = {
+  password: string
+  new_password: string
+  confirm_password: string
+}
+// type FormData = Pick<UserSchemaType, 'password' | 'confirm_password' | 'new_password'>
+// const passWordSchema = userSchema.pick(['password', 'new_password', 'confirm_password'])
 
 export default function ChangePassWord() {
   const {

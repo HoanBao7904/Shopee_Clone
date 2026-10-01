@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { type ButtonHTMLAttributes } from 'react'
+import { type ButtonHTMLAttributes } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   //muốn props có được onclick ... thì dùng extend kế thừa có kiểu riêng của nó
