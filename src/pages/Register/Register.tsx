@@ -11,7 +11,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
-import Button from 'src/Button'
+import Button from 'src/button'
 
 interface FormData {
   email: string

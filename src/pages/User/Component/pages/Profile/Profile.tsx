@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import userAPI from 'src/apis/user.api'
-import Button from 'src/Button'
+import Button from 'src/button'
 import Input from 'src/components/Input'
 import InputNumber from 'src/components/InputNumber'
 import { userSchema, type UserSchemaType } from 'src/utils/rules'
