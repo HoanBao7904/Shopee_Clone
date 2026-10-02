@@ -21,6 +21,7 @@ export default function Login() {
 
   const {
     setError,
+    setValue,
     register, // đăng ký input với react-hook-form
     handleSubmit, // xử lý submit form
     // getValues, // lấy giá trị của form
@@ -97,7 +98,23 @@ export default function Login() {
                 <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>{errors.password?.message}</div>
               </div>
 
-              <div className='mt3'>
+              <div className='mt-5'>
+                <p className='text-sm font-semibold text-gray-600 mb-2'>Tài khoản Demo</p>
+
+                <button
+                  type='button'
+                  onClick={() => {
+                    setValue('email', 'hoan.bao.nguyen.dev1@gmail.com')
+                    setValue('password', '123456')
+                  }}
+                  className='w-full p-3 text-left border border-gray-200 rounded hover:bg-gray-50 transition'
+                >
+                  <div className='font-medium'>👤 Tài khoản Demo</div>
+                  <div className='text-sm text-gray-500'>hoan.bao.nguyen.dev1@gmail.com / 123456</div>
+                </button>
+              </div>
+
+              <div className='mt-3'>
                 <Button
                   type='submit'
                   isLoding={loginAccountMutation.isPending}
